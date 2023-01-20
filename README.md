@@ -1,3 +1,3 @@
 # helloflask
 
-https://tutorial.helloflask.com
+<https://tutorial.helloflask.com>
