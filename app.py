@@ -65,14 +65,6 @@ class Movie(db.Model):
     year = db.Column(db.String(4))
 
 
-@app.route("/")
-def index():
-    user = User.query.first()
-    movies = Movie.query.all()
-    return render_template("index.html", user=user, movies=movies)
-    # return render_template("index.html", name=name, movies=movies)
-
-
 @app.route("/user/<name>")
 def user_page(name):
     return f"User: {escape(name)}"
@@ -86,3 +78,22 @@ def test_url_for():
     print(url_for("test_url_for"))
     print(url_for("test_url_for", num=2))
     return "Test page"
+
+
+@app.context_processor
+def inject_user():
+    user = User.query.first()
+    return dict(user=user)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html"), 404
+
+
+@app.route("/")
+def index():
+    # user = User.query.first()
+    movies = Movie.query.all()
+    return render_template("index.html", movies=movies)
+    # return render_template("index.html", name=name, movies=movies)
