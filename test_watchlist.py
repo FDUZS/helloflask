@@ -1,6 +1,8 @@
 import unittest
 
-from app import app, db, Movie, User, forge, initdb
+from watchlist import app, db
+from watchlist.models import Movie, User
+from watchlist.commands import forge, initdb
 
 app.app_context().push()
 
@@ -51,11 +53,11 @@ class WatchlistTestCase(unittest.TestCase):
     def test_login_protect(self):
         response = self.client.get("/")
         data = response.get_data(as_text=True)
-        # self.assertNotIn("Logout", data)
-        # self.assertNotIn("Settings", data)
+        self.assertNotIn("Logout", data)
+        self.assertNotIn("Settings", data)
         self.assertNotIn('<form method="post">', data)
-        # self.assertNotIn("Delete", data)
-        # self.assertNotIn("Edit", data)
+        self.assertNotIn("Delete", data)
+        self.assertNotIn("Edit", data)
 
     def test_login(self):
         response = self.client.post(
@@ -67,7 +69,7 @@ class WatchlistTestCase(unittest.TestCase):
         self.assertIn("Settings", data)
         self.assertIn("Delete", data)
         self.assertIn("Edit", data)
-        # self.assertIn('<form method="post">', data)
+        self.assertIn('<form method="post">', data)
 
         response = self.client.post(
             "/login", data=dict(username="test", password="456"), follow_redirects=True
